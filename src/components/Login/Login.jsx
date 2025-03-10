@@ -1,8 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { useNavigate } from "react-router";
 
 const Login = () => {
-    const { signInUser } = useContext(AuthContext);
+    const { signInUser, googleLogin } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handelFormSubmitLogin = e => {
         e.preventDefault();
@@ -14,11 +16,25 @@ const Login = () => {
         signInUser(email, password)
             .then(res => {
                 console.log(res.user)
+                e.target.reset();
+                navigate('/');
             })
             .catch(error => {
                 console.log(error)
             })
     }
+
+    const handelGoogleLogin = () => {
+        googleLogin()
+            .then(res => {
+                console.log(res.user)
+                navigate('/');
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
     return (
         <div className="hero">
             <div className="hero-content flex-col lg:flex-row-reverse">
@@ -31,6 +47,7 @@ const Login = () => {
                             <input name='password' type="password" className="input" placeholder="Password" />
                             <div><a className="link link-hover">Forgot password?</a></div>
                             <button className="btn btn-neutral mt-4">Login</button>
+                            <button onClick={handelGoogleLogin} className="btn btn-neutral mt-4">Google Login</button>
                         </form>
                     </div>
                 </div>
